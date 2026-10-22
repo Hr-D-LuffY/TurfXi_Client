@@ -17,3 +17,19 @@ export function getSocket(): Socket {
   }
   return socket;
 }
+
+export function connectSocket(): Socket {
+  const s = getSocket();
+  const token = getToken();
+  if (token && !s.connected) {
+    s.auth = { token };
+    s.connect();
+  }
+  return s;
+}
+
+export function disconnectSocket(): void {
+  if (socket && socket.connected) {
+    socket.disconnect();
+  }
+}
