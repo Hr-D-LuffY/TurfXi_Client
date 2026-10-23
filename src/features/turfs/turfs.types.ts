@@ -1,8 +1,33 @@
-// import { z } from 'zod';
+export interface TurfPhoto {
+  id: string;
+  turfId: string;
+  url: string;
+}
 
-// TODO (turfs): define the Zod schema(s) for turfs — ideally mirroring
-// (or generated from) the backend's request/response shapes for this module,
-// so validation rules live in one place conceptually even if duplicated here.
+export interface MembersOnlySlot {
+  id: string;
+  turfId: string;
+  dayOfWeek: number;
+  startTime: string;
+  endTime: string;
+}
 
-// export const turfsSchema = z.object({ });
-// export type Turfs = z.infer<typeof turfsSchema>;
+export interface Turf {
+  id: string;
+  ownerId: string;
+  name: string;
+  description?: string | null;
+  address: string;
+  city: string;
+  area: string;
+  latitude: number;
+  longitude: number;
+  pricePerHour: string | number;
+  size?: string | null;
+  surfaceType?: string | null;
+  advancePercent: number;
+  verified: boolean;
+  createdAt: string;
+  photos?: TurfPhoto[];
+  membersOnlySlots?: MembersOnlySlot[];
+}

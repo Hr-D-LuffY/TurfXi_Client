@@ -1,8 +1,46 @@
-// import { apiClient } from '@/lib/apiClient';
-// import type { /* types from './matchStats.types' */ } from './matchStats.types';
+import { apiClient } from '@/lib/apiClient';
+import type {
+  PlayerStatsData,
+  LeaderboardPlayer,
+  HeadToHeadStats,
+  SubmitMatchReportData,
+} from './matchStats.types';
 
-// TODO (matchStats): implement API calls for match stats, matching the backend's
-// /api/match-stats routes.
 export const matchStatsApi = {
-  // list: () => apiClient.get('/match-stats'),
+  getPlayerStats: async (playerId: string): Promise<PlayerStatsData> => {
+    const res = await apiClient.get<{ data: PlayerStatsData }>(
+      `/match-stats/player/${playerId}`
+    );
+    return res.data;
+  },
+
+  getLeaderboard: async (
+    category: 'goals' | 'assists' | 'rating' = 'goals'
+  ): Promise<LeaderboardPlayer[]> => {
+    const res = await apiClient.get<{ data: LeaderboardPlayer[] }>(
+      `/match-stats/leaderboard?category=${category}`,
+      { skipAuth: true }
+    );
+    return res.data;
+  },
+
+  getHeadToHead: async (
+    teamAId: string,
+    teamBId: string
+  ): Promise<HeadToHeadStats> => {
+    const res = await apiClient.get<{ data: HeadToHeadStats }>(
+      `/match-stats/head-to-head?teamAId=${encodeURIComponent(
+        teamAId
+      )}&teamBId=${encodeURIComponent(teamBId)}`
+    );
+    return res.data;
+  },
+
+  submitMatchReport: async (data: SubmitMatchReportData): Promise<unknown> => {
+    const res = await apiClient.post<{ data: unknown }>(
+      '/match-stats/report',
+      data
+    );
+    return res.data;
+  },
 };
