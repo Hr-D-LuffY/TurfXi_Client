@@ -14,6 +14,8 @@ import {
   LogOut,
   MapPin,
   Sparkles,
+  Flame,
+  User,
 } from 'lucide-react';
 import { useAuthStore } from '@/features/auth/auth.store';
 import { useLogout } from '@/features/auth/auth.hooks';
@@ -23,6 +25,7 @@ import { Button } from '@/components/ui/button';
 const navLinks = [
   { href: '/turfs', label: 'Turfs', icon: MapPin },
   { href: '/tournaments', label: 'Tournaments', icon: Trophy },
+  { href: '/leaderboard', label: 'Leaderboard', icon: Flame },
   { href: '/bookings', label: 'My Bookings', icon: Calendar },
   { href: '/missing-players', label: 'Open Slots', icon: Users },
   { href: '/teams', label: 'Squads', icon: Shield },
@@ -112,12 +115,15 @@ export function Navbar() {
         <div className="hidden md:flex items-center gap-3">
           {user ? (
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2">
+              <Link
+                href={`/players/${user.sub}`}
+                className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+              >
                 {getTierBadge()}
-                <span className="text-xs font-medium text-foreground max-w-[140px] truncate">
+                <span className="text-xs font-semibold text-foreground max-w-[140px] truncate underline-offset-4 hover:underline">
                   {user.email.split('@')[0]}
                 </span>
-              </div>
+              </Link>
 
               <Button
                 variant="ghost"
@@ -189,12 +195,19 @@ export function Navbar() {
           <div className="border-t border-border/60 pt-3">
             {user ? (
               <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs text-muted-foreground px-3">
-                  <span>Signed in as:</span>
-                  <span className="font-semibold text-foreground truncate max-w-[180px]">
-                    {user.email}
+                <Link
+                  href={`/players/${user.sub}`}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-between text-xs text-muted-foreground px-3 py-1.5 rounded-md hover:bg-secondary transition-colors"
+                >
+                  <span className="flex items-center gap-1.5 font-medium text-foreground">
+                    <User className="h-3.5 w-3.5 text-emerald-600" />
+                    My Player Profile
                   </span>
-                </div>
+                  <span className="font-semibold text-emerald-600 underline">
+                    View Stats
+                  </span>
+                </Link>
                 <Button
                   variant="outline"
                   size="sm"
